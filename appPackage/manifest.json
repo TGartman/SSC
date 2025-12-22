@@ -1,0 +1,31 @@
+{
+"$schema": "https://developer.microsoft.com/json-schemas/teams/v1.22/MicrosoftTeams.schema.json",
+"manifestVersion": "1.22",
+"version": "1.2.0",
+"id": "${{TEAMS_APP_ID}}",
+    "developer": {
+        "name": "My App, Inc.",
+        "websiteUrl": "https://www.example.com",
+        "privacyUrl": "https://www.example.com/privacy",
+        "termsOfUseUrl": "https://www.example.com/termofuse"
+    },
+    "icons": {
+        "color": "color.png",
+        "outline": "outline.png"
+    },
+    "name": {
+        "short": "Marketing${{APP_NAME_SUFFIX}}",
+        "full": "Full name for Marketing"
+    },
+    "description": {
+        "short": "Short description for Marketing",
+        "full": "Full description for Marketing"
+    },
+    "accentColor": "#FFFFFF",
+    "composeExtensions": [],
+    "permissions": [
+        "identity",
+        "messageTeamMembers"
+    ],
+    "validDomains": []
+}

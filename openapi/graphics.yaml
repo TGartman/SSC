@@ -1,0 +1,299 @@
+openapi: 3.0.3
+
+info:
+  title: Social Graphics API
+  version: 1.0.0
+  description: >
+    Generate branded social media graphics using SharePoint-hosted product images and logos.
+    Defaults: Cochin font, premium minimal styling, logo bottom-right.
+
+servers:
+  - url: http://localhost:7071
+
+security:
+  - bearerAuth: []
+
+tags:
+  - name: Assets
+    description: Discover images in SharePoint
+  - name: Graphics
+    description: Generate social media graphics
+
+paths:
+  /assets/listBrandImages:
+    post:
+      tags: [Assets]
+      operationId: listBrandImages
+      summary: List product images for a brand and product line
+      description: >
+        Lists image files from SharePoint using the standard folder structure:
+        /{Brand}/{Exterior|Interior Products}/{Product Line}/{Catalog Images|Lifestyle Images}
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/ListBrandImagesRequest"
+            examples:
+              mtDesignlineCatalog:
+                value:
+                  brand: MT
+                  category: exterior
+                  productLine: "Designline Fixed Louver"
+                  folderType: "Catalog Images"
+                  maxResults: 50
+      responses:
+        "200":
+          description: Image candidates
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ListBrandImagesResponse"
+        "400":
+          $ref: "#/components/responses/BadRequest"
+        "401":
+          $ref: "#/components/responses/Unauthorized"
+        "500":
+          $ref: "#/components/responses/ServerError"
+
+  /graphics/generate:
+    post:
+      tags: [Graphics]
+      operationId: generateSocialGraphic
+      summary: Generate a branded social media graphic
+      description: >
+        Composes a social graphic from a SharePoint product image and brand logo.
+        Text overlays use Cochin (or closest available fallback).
+        Logo is placed bottom-right with safe padding.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/GenerateGraphicRequest"
+            examples:
+              sscSquare:
+                value:
+                  brand: SSC
+                  format: square_1080
+                  headline: "DesignLine Fixed Louver"
+                  subhead: "Precision-built for curb appeal"
+                  cta: "Request a quote"
+                  productImage:
+                    driveId: "b!PoMHdTFlPE6tmvF8jCWWVRN65gfY5GBJsf9ixyj9kr1Vd7Mj-PwGSKCd_KsaC9Gu"
+                    itemId: "01POEEX7WRLEAJTNEXONBIRZWTSFVSGIJP"
+                  logoImage:
+                    driveId: "b!PoMHdTFlPE6tmvF8jCWWVRN65gfY5GBJsf9ixyj9kr1Vd7Mj-PwGSKCd_KsaC9Gu"
+                    itemId: "01POEEX7U6ZUBW7XXJARCJ7MKWYN5L2J6A"
+                  style:
+                    theme: premium_minimal
+                    fontFamily: Cochin
+                    textAlign: left
+                    safePaddingPx: 64
+                    logoPlacement: bottom_right
+                    logoMaxWidthPct: 16
+                  output:
+                    returnBase64: true
+                    saveToSharePoint: false
+                    fileName: "SSC_DesignLine_FixedLouver_1080.png"
+      responses:
+        "200":
+          description: Generated graphic
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/GenerateGraphicResponse"
+        "400":
+          $ref: "#/components/responses/BadRequest"
+        "401":
+          $ref: "#/components/responses/Unauthorized"
+        "500":
+          $ref: "#/components/responses/ServerError"
+
+components:
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+
+  responses:
+    BadRequest:
+      description: Invalid request
+      content:
+        application/json:
+          schema:
+            $ref: "#/components/schemas/ErrorResponse"
+
+    Unauthorized:
+      description: Unauthorized
+      content:
+        application/json:
+          schema:
+            $ref: "#/components/schemas/ErrorResponse"
+
+    ServerError:
+      description: Server error
+      content:
+        application/json:
+          schema:
+            $ref: "#/components/schemas/ErrorResponse"
+
+  schemas:
+    Brand:
+      type: string
+      enum: [SSC, MT, DWELL]
+
+    Category:
+      type: string
+      enum: [exterior, interior]
+
+    FolderType:
+      type: string
+      enum: ["Catalog Images", "Lifestyle Images"]
+
+    DriveItemRef:
+      type: object
+      required: [driveId, itemId]
+      properties:
+        driveId:
+          type: string
+        itemId:
+          type: string
+        webUrl:
+          type: string
+          nullable: true
+
+    ListBrandImagesRequest:
+      type: object
+      required: [brand, category, productLine, folderType]
+      properties:
+        brand:
+          $ref: "#/components/schemas/Brand"
+        category:
+          $ref: "#/components/schemas/Category"
+        productLine:
+          type: string
+        folderType:
+          $ref: "#/components/schemas/FolderType"
+        maxResults:
+          type: integer
+          default: 50
+
+    ImageCandidate:
+      type: object
+      required: [driveId, itemId, name]
+      properties:
+        driveId:
+          type: string
+        itemId:
+          type: string
+        name:
+          type: string
+        webUrl:
+          type: string
+        mimeType:
+          type: string
+          nullable: true
+
+    ListBrandImagesResponse:
+      type: object
+      required: [images]
+      properties:
+        images:
+          type: array
+          items:
+            $ref: "#/components/schemas/ImageCandidate"
+
+    GraphicFormat:
+      type: string
+      enum: [square_1080, portrait_1080x1350, story_1080x1920]
+
+    LogoPlacement:
+      type: string
+      enum: [bottom_right, bottom_left, top_right, top_left]
+
+    StyleOptions:
+      type: object
+      properties:
+        theme:
+          type: string
+          default: premium_minimal
+        fontFamily:
+          type: string
+          default: Cochin
+        textAlign:
+          type: string
+          enum: [left, center, right]
+        safePaddingPx:
+          type: integer
+          default: 64
+        logoPlacement:
+          $ref: "#/components/schemas/LogoPlacement"
+        logoMaxWidthPct:
+          type: integer
+          default: 16
+
+    OutputTarget:
+      type: object
+      properties:
+        returnBase64:
+          type: boolean
+          default: true
+        saveToSharePoint:
+          type: boolean
+          default: false
+        fileName:
+          type: string
+
+    GenerateGraphicRequest:
+      type: object
+      required: [brand, format, productImage, logoImage]
+      properties:
+        brand:
+          $ref: "#/components/schemas/Brand"
+        format:
+          $ref: "#/components/schemas/GraphicFormat"
+        headline:
+          type: string
+        subhead:
+          type: string
+        cta:
+          type: string
+        productImage:
+          $ref: "#/components/schemas/DriveItemRef"
+        logoImage:
+          $ref: "#/components/schemas/DriveItemRef"
+        style:
+          $ref: "#/components/schemas/StyleOptions"
+        output:
+          $ref: "#/components/schemas/OutputTarget"
+
+    GenerateGraphicResponse:
+      type: object
+      required: [brand, format, width, height, mimeType]
+      properties:
+        brand:
+          $ref: "#/components/schemas/Brand"
+        format:
+          $ref: "#/components/schemas/GraphicFormat"
+        width:
+          type: integer
+        height:
+          type: integer
+        mimeType:
+          type: string
+        base64:
+          type: string
+          nullable: true
+
+    ErrorResponse:
+      type: object
+      properties:
+        error:
+          type: object
+          properties:
+            code:
+              type: string
+            message:
+              type: string

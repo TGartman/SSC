@@ -1,0 +1,22 @@
+{
+  "brand": "DWELL",
+  "format": "square_1080",
+  "headline": "Custom Shutters",
+  "subhead": "Built to last",
+  "cta": "Learn More",
+  "productImage": {
+    "driveId": "b!PoMHdTFlPE6tmvF8jCWWVRN65gfY5GBJsf9ixyj9kr1Vd7Mj-PwGSKCd_KsaC9Gu",
+    "itemId": "01POEEX7WRLEAJTNEXONBIRZWTSFVSGIJP"
+  },
+  "style": {
+    "logoPlacement": "bottom_right",
+    "safePaddingPx": 64,
+    "logoMaxWidthPct": 16,
+    "textAlign": "left"
+  },
+  "output": {
+    "returnBase64": false,
+    "saveToSharePoint": true,
+    "fileName": "DWELL_Test_square_1080.png"
+  }
+}
