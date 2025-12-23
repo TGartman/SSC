@@ -2,5 +2,8 @@
   "name": "marketing-functions",
   "version": "1.0.0",
   "private": true,
-  "main": "index.js"
+  "main": "index.js",
+  "dependencies": {
+    "@typespec/compiler": "^1.7.1"
+  }
 }
