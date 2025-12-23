@@ -1,32 +1,81 @@
-# TeamsFx files
-env/.env.*.user
-env/.env.local
-.localConfigs
-appPackage/build
-build
-
-# dependencies
-node_modules/
-
-# misc
-.env
-.deployment
+############################
+# OS / Editor junk
+############################
 .DS_Store
+Thumbs.db
 
-# generated files
-appPackage/.generated
-# generated environment variables
-src/agent/env.tsp
-# Azure Functions local settings (contains secrets)
+############################
+# Dependencies / build output
+############################
+node_modules/
+dist/
+build/
+out/
+.tmp/
+temp/
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+
+############################
+# Azure Functions / local secrets
+############################
 local.settings.json
-
-# local env files
-.env
-.env.*
-
-# VS Code local settings
-.vscode/
-local.settings.json
+local.settings.*.json
 local.settings*.json
+*.secret*
+*.secrets*
+secrets.json
+**/secrets.json
+
+# Functions build artifacts
+bin/
+obj/
+
+############################
+# Environment files (secrets)
+############################
 .env
 .env.*
+!.env.example
+!.env.sample
+!.env.template
+
+############################
+# Certificates / keys
+############################
+*.pem
+*.pfx
+*.p12
+*.key
+*.cer
+*.crt
+
+############################
+# IDE: VS Code
+############################
+# Keep ONLY team-safe shared config if you want (uncomment the allowlist section below)
+.vscode/
+
+# ---- OPTIONAL: allowlist safe VS Code files ----
+# If you want to keep team-shared settings, do this instead:
+# .vscode/*
+# !.vscode/settings.json
+# !.vscode/extensions.json
+# !.vscode/tasks.json
+# !.vscode/launch.json
+
+############################
+# TeamsFx / misc
+############################
+.localConfigs/
+appPackage/build/
+appPackage/.generated/
+
+############################
+# Coverage
+############################
+coverage/
+.nyc_output/
