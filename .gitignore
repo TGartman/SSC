@@ -22,8 +22,6 @@ pnpm-debug.log*
 ############################
 # Azure Functions / local secrets
 ############################
-local.settings.json
-local.settings.*.json
 local.settings*.json
 *.secret*
 *.secrets*
@@ -42,6 +40,7 @@ obj/
 !.env.example
 !.env.sample
 !.env.template
+!env/.env.dev
 
 ############################
 # Certificates / keys
@@ -57,7 +56,12 @@ obj/
 # IDE: VS Code
 ############################
 # Keep ONLY team-safe shared config if you want (uncomment the allowlist section below)
-.vscode/
+.vscode/*
+!.vscode/settings.json
+!.vscode/extensions.json
+!.vscode/extensions.json
+!.vscode/tasks.json
+!.vscode/launch.json
 
 # ---- OPTIONAL: allowlist safe VS Code files ----
 # If you want to keep team-shared settings, do this instead:
