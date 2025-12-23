@@ -79,3 +79,5 @@ appPackage/.generated/
 ############################
 coverage/
 .nyc_output/
+# generated environment variables
+src/agent/env.tsp
