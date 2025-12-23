@@ -17,3 +17,12 @@ node_modules/
 appPackage/.generated
 # generated environment variables
 src/agent/env.tsp
+# Azure Functions local settings (contains secrets)
+local.settings.json
+
+# local env files
+.env
+.env.*
+
+# VS Code local settings
+.vscode/
