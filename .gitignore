@@ -30,7 +30,3 @@ local.settings.json
 local.settings*.json
 .env
 .env.*
-
-local.settings.json
-local.settings*.json
-
