@@ -26,3 +26,7 @@ local.settings.json
 
 # VS Code local settings
 .vscode/
+local.settings.json
+local.settings*.json
+.env
+.env.*
